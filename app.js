@@ -17,7 +17,7 @@ const promptUser = () => {
     {
       type: 'input',
       name: 'name',
-      message: 'What is your name?',
+      message: 'What is your name? (Required)',
       validate: nameInput => {
         if (nameInput) {
           return true;
@@ -30,7 +30,7 @@ const promptUser = () => {
     {
       type: 'input',
       name: 'github',
-      message: 'Enter your GitHub Username',
+      message: 'Enter your GitHub Username (Required)',
       validate: nameInput => {
         if (nameInput) {
           return true;
@@ -69,15 +69,17 @@ const promptProject = portfolioData => {
 Add a New Project
 =================
 `);
+
   // If there's no 'projects' array property, create one
   if (!portfolioData.projects) {
     portfolioData.projects = [];
   }
+
   return inquirer.prompt([
     {
       type: 'input',
       name: 'name',
-      message: 'What is the name of your project?',
+      message: 'What is the name of your project? (Required)',
       validate: nameInput => {
         if (nameInput) {
           return true;
@@ -131,7 +133,8 @@ Add a New Project
       message: 'Would you like to enter another project?',
       default: false
     }
-  ]).then(projectData => {
+  ])
+  .then(projectData => {
     portfolioData.projects.push(projectData);
     if (projectData.confirmAddProject) {
       return promptProject(portfolioData);
@@ -147,7 +150,7 @@ Add a New Project
 promptUser()
   .then(promptProject)
   .then(portfolioData => {
-    const pageHTML = generatePage(name, gitHub);
+    const pageHTML = generatePage(portfolioData);
 
     fs.writeFile('index.html', pageHTML, err => {
       if (err) throw err;
